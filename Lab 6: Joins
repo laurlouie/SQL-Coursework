@@ -1,0 +1,91 @@
+/*
+SQL Lab #6
+Lauren Louie
+*/
+
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+
+/*
+1. We need to see all the inventory and order items data together, side by side. 
+(use Implicit Join)
+This query shows us the all of the information that is between the two tables of 
+Inventory and Order_Item from the Cape Codd excel table. 
+With this type of information, it can help business leaders see and interpret all 
+of the primary keys. 
+For this query, it might help managers easily decide and count the in stock 
+quantity amount.
+*/
+SELECT *
+FROM INVENTORY, ORDER_ITEM
+WHERE INVENTORY.SKU = ORDER_ITEM.SKU;
+
+--2. We need to know which store number has customers ordering the most quantity. 
+Tell us each store number and then the total quantity ordered at that store. Label 
+the total quantity ordered by each store as "Order Quantity". 
+SELECT StoreNumber, Quantity AS 'Order Quantity'
+FROM RETAIL_ORDER, ORDER_ITEM
+WHERE RETAIL_ORDER.OrderNumber = ORDER_ITEM.OrderNumber;
+
+/*
+3. We need to know total costs for our quantity on order. We will do this by taking
+the quantity on order and multiplying it by the price of each individual item. 
+Please gather the SKU, warehouse ID, quantity that we have on order, price and then
+include a column for the total that the quantity cost and name this column Total 
+Cost. 
+Have the output order results by the warehouse ID. Be sure that the SKUs are unique
+within each Warehouse. I am looking for a calculated field here. 
+The "total that the quantity cost" will be a calculated field. Remember, a 
+calculated field looks like a little math equation inside the select statement. 
+An example of a calculated field in a select might be SELECT QuantityOnOrder * 
+QuantityOnHand AS Total
+This query shows business managers an accurate representation of the total cost 
+that is coming out of their pocket to replenish the inventory stock. 
+This kind of information can be very helpful to a business owner because they will 
+be able to produce accurate total cost amounts.
+*/
+SELECT DISTINCT (ORDER_ITEM.SKU), WarehouseID, QuantityOnOrder, Price, 
+QuantityOnOrder * Price AS 'Total Cost'
+FROM ORDER_ITEM, INVENTORY
+WHERE ORDER_ITEM.SKU = INVENTORY.SKU
+ORDER BY WarehouseID;
+
+--4. Redo #1 but use a JOIN ON (Explicit) instead.
+SELECT *
+FROM INVENTORY
+JOIN ORDER_ITEM
+ON INVENTORY.SKU = ORDER_ITEM.SKU;
+
+/*
+5. We want to see all the Warehouse ID, Date on Website from SKU Catalog 2014, 
+Price of each item from Order Item and Quantity on Hand. You will use three tables.
+Use a JOIN ON (Explicit). Group them all together in order listed here.
+With this query, it can be understood that all of the listed WarehouseID's show 
+that they were all put on the same date of January 1st, 2014. 
+There are prices and quantity on hand numbers that can help aid a business owner 
+with inventory checks while also figuring out if they should order more or less of 
+that Quantity based on the WarehouseID number.
+*/
+SELECT WarehouseID, DateOnWebSite, Price, QuantityOnHand
+FROM CATALOG_SKU_2014 AS C
+JOIN ORDER_ITEM AS OI
+ON OI.SKU = C.SKU
+JOIN INVENTORY AS I
+ON I.SKU = OI.SKU;
+
+/*
+6. Return a list of the WarehouseIDs, Warehouse cities and the SKU descriptions in 
+them. 
+Use a LEFT OUTER JOIN. Why is there a NULL value for the Warehouse in San 
+Francisco?  
+Also, please explain why the results are different when you use LEFT, RIGHT or 
+INNER join. 
+Include the answers to these questions as a comment for #5 after the query.
+This list of values shows all of the different WarehouseID's, WarehouseCity's, and 
+their respective SKU_Descriptions.
+With the LEFT OUTER JOIN function, we can see that there is no value for a NULL 
+value for the Warehouse in San Francisco.
+*/
+SELECT W.WarehouseID, WarehouseCity, SKU_description
+FROM INVENTORY AS I
+LEFT OUTER JOIN WAREHOUSE AS W
+ON I.WarehouseID = W.WarehouseID;
