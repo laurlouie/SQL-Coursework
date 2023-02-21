@@ -1,0 +1,79 @@
+/*
+SQL Lab #4
+Lauren Louie
+*/
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+
+--1. What are all the months that retail orders were made but we only want the 
+first 3 letters of each month.
+SELECT LEFT (OrderMonth, 3)
+FROM RETAIL_ORDER;
+
+/*
+2. What are the warehouse cities where the size is greater than 130,000 square 
+feet. In your output ensure the results are all in uppercase and please rename the 
+warehouse cities to "CapitalCity".
+With this information, managers are able to anticipate where to store larger 
+inventory items across the country so that they can adequately fit. 
+They are also able to build new warehouses to accomodate for growing inventory 
+numbers and in different regions of the country to be able to ship orders faster.
+*/
+SELECT UPPER (WarehouseCity) AS CapitalCity
+FROM WAREHOUSE
+WHERE SquareFeet > 130000;
+
+--3. Return the number of rows in the 2013 catalog that have page numbers in them. 
+SELECT COUNT(*) AS NumberOfRows
+FROM CATALOG_SKU_2013
+WHERE CatalogPage IS NOT NULL;
+
+/*
+4. What is the total of extended prices from our orders?
+This information could help an accounting manager accurately count the sum of the 
+extended prices from the ORDER_ITEM table while also completing it in a timely 
+manner.
+*/
+SELECT SUM (ExtendedPrice)
+FROM ORDER_ITEM;
+
+--5. Return the average of the Extended Prices from our order items if the Price is
+over 100. 
+SELECT AVG (ExtendedPrice)
+FROM ORDER_ITEM
+WHERE Price > 100; 
+
+/*
+6. What are the max prices and minimum prices from our orders? Rename the output as
+MaxPrice and MinPrice.
+From this information, managers are able to infer what the maximum and minimum 
+value of the order item purchased.
+This can help when organizing inventory data to ensure that everything is up to 
+date and as accurate as possible.
+*/
+SELECT MAX (Price) AS MaxPrice, MIN (Price) AS MinPrice
+FROM ORDER_ITEM; 
+
+--7. We need to get a table of the warehouse IDs and their respective cities and 
+states. Please provide the cities and states in the following format: (City), 
+(State) such as "Atlanta, GA". Have the output labeled Location and be sure the 
+results are in order based on the warehouse ID
+SELECT WarehouseID, CONCAT(RTRIM(WarehouseCity), ', ', WarehouseState) AS Location 
+FROM WAREHOUSE
+ORDER BY WarehouseID;
+
+/*
+8. Return a concatenated string that looks like this form: "We have 200 of the Std.
+Scuba Tank, Magenta in Warehouse 100." From our inventory.
+If customers are viewing this data, it will be easier to interpret to them rather 
+than having to look at an excel sheet filled with data that might not be 
+understandable to them.
+*/
+SELECT CONCAT('We have ', (QuantityOnHand), ' of the ', RTRIM(SKU_Description),' in
+Warehouse ', (WarehouseID)) AS 'Inventory in Warehouse' 
+FROM INVENTORY;
+
+--9. Return only the current year by using a SQL query.
+SELECT DATEPART(year, GETDATE()) AS 'Current Year';
+
+--10. Return what the date would look like one month from now using a SQL query.
+SELECT DATEADD(day, 31, GETDATE()) AS 'One Month From Now';
