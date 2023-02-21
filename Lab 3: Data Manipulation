@@ -1,0 +1,87 @@
+/*
+SQL Lab #3
+Lauren Louie
+*/
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+/*
+
+1. What inventory do we have related to Scuba? Give me all the details of each 
+item.
+This information gives customers the ability to see the inventory items for all 
+things Scuba related and is user-friendly.
+*/
+SELECT *
+FROM INVENTORY
+WHERE SKU_Description LIKE '%Scuba%';
+
+--2. What are the items we ordered where the SKU on the items has a 10 as the first
+two digits? Just let us know the order number and the SKU.
+SELECT OrderNumber, SKU
+FROM ORDER_ITEM
+WHERE SKU LIKE '10%__';
+
+--3. Return all data from our warehouses where the city of the warehouse has either
+an 'o' or an 'e' at the end of the name.
+SELECT *
+FROM WAREHOUSE
+WHERE WarehouseCity LIKE '%o' OR WarehouseCity LIKE '%e';
+/*
+
+--4. Return the SKU descriptions from the 2015 catalog that isn't in the camping 
+department. Rename the returned column to 'Item'. 
+This allows customers to browse the different inventory items that are not related 
+to the department of camping.
+*/
+SELECT SKU_Description AS Item
+FROM CATALOG_SKU_2015
+WHERE Department <> 'Camping';
+
+--5. Return the SKU, quantity we have on hand and quantity we have on order from 
+the inventory where there is a '12' somewhere in the SKU. Rename the Quantity on 
+Hand to 'In Stock' and rename the Quantity on Order to 'Forthcoming'.
+SELECT SKU, QuantityOnHand AS In_Stock, QuantityOnOrder AS Forthcoming
+FROM INVENTORY
+WHERE SKU LIKE '%12%';
+
+--6. Return the SKU descriptions from the inventory and group them by the SKU 
+descriptions.
+SELECT SKU_Description
+FROM INVENTORY
+WHERE SKU IS NOT NULL
+GROUP BY SKU_Description;
+/* 
+
+-- 7. What are the years and months from our retail orders? In your output, have the 
+columns use Year and Month instead of the column names, please. 
+Be sure the items are group up accordingly.
+Having this information lets business owners track their retail orders with the 
+month and year. This type of information can be useful when analyzing
+when the company should get ready to place an order as an example.
+*/
+SELECT OrderMonth AS Month, OrderYear AS Year
+FROM RETAIL_ORDER
+WHERE OrderNumber IS NOT NULL;
+
+--8. Return the department, the date it was put on the website (rename to PubDate) 
+from our 2014 catalog. Group them by website date and department.
+SELECT Department, DateOnWebsite AS PubDate
+FROM CATALOG_SKU_2014
+GROUP BY Department, DateOnWebSite;
+
+--9. What are the order numbers for orders that ordered more than one SKU in them, 
+please show me the actual order number and the number of SKUs in that order (rename
+to it NumberOfSingleItems). But make sure its only data that has more than one SKU 
+count (HINT: use HAVING).
+SELECT OrderNumber, COUNT(SKU) AS NumberOfSingleItems
+FROM ORDER_ITEM
+GROUP BY OrderNumber
+HAVING COUNT(SKU) > 1;
+
+--10. Return the order number, the sum of the Extended Price (rename as TotalCost) 
+from the Order Items where there is more than 1 quantity. Also ensure the data 
+returned has more than one SKU count.  (HINT: also use HAVING)
+SELECT OrderNumber, SUM(ExtendedPrice) AS TotalCost
+FROM ORDER_ITEM
+WHERE Quantity > 1
+GROUP BY OrderNumber
+HAVING COUNT(SKU) > 1;
