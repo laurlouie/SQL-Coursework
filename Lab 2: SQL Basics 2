@@ -1,0 +1,78 @@
+/*
+SQL Lab #2
+Lauren Louie
+*/
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+
+/* 1. Return the SKU descriptions from the 2014 catalog that are in the Winter 
+Sports department.
+This data is customer friendly and can give them information about items associated
+with that specific department and from that year's catalog.
+*/
+SELECT SKU_Description
+FROM CATALOG_SKU_2014
+WHERE Department = 'Water Sports';
+
+--2. What are the products that were put on the website from the 2015 catalog on 
+exactly April 1st, 2015. Please show me their SKU and SKU Descriptions.
+SELECT SKU, SKU_Description
+FROM CATALOG_SKU_2015
+WHERE DateOnWebsite = '2015-04-01';
+
+/* 3. Return the cities of the warehouses whose square feet is greater than 
+150,000.
+This information can let business owners decide on where to keep larger inventory 
+items while 
+dispersing other smaller inventory items throuh other warehouses in the country.
+*/
+SELECT WarehouseCity
+FROM WAREHOUSE
+WHERE SquareFeet > 150000;
+
+--4. What are all the details of our inventory that is stored in the warehouse with
+an ID of 300 and that we also have a greater than 300 of them on hand.
+SELECT *
+FROM INVENTORY
+WHERE WarehouseID = 300 AND QuantityOnHand > 300;
+
+--5. Return all data from the 2013 catalog where the catalog page is greater than 
+30 OR if we don't have a catalog page (NULL) and then order it please by 
+department.
+SELECT *
+FROM CATALOG_SKU_2013
+WHERE CatalogPage > 30 OR CatalogPage = NULL
+ORDER BY Department;
+
+-- 6. Return all data from the order items where the quantity is equal to 1 but 
+those items do not have a price of 300.
+SELECT *
+FROM ORDER_ITEM
+WHERE Quantity = 1 AND NOT Price = 300;
+
+/* 7. What is in our inventory that we have less than 200 of and nothing on order? 
+Please tell me all the details of these inventory items.
+The information given from this query is able to provide details to business owners
+on what in inventory items need to be replenished on.
+*/
+SELECT *
+FROM INVENTORY
+WHERE QuantityOnHand < 200 AND QuantityOnOrder = 0;
+
+--8. Return all data from the warehouse where the warehouse's city is not in 
+Atlanta, Chicago, or Seattle.
+SELECT *
+FROM WAREHOUSE
+WHERE WarehouseCity NOT IN ('Atlanta', 'Chicago', 'Seattle');
+
+--9. Return all data from the 2013 catalog where the catalog's page is between 20 
+and 45, inclusive. Be sure the result is in order by catalog page.
+SELECT *
+FROM CATALOG_SKU_2013
+WHERE CatalogPage between 20 AND 45
+ORDER BY CatalogPage;
+
+--10. We need to know what in the 2014 catalog doesn't have a catalog page 
+associated with it. Providing the SKU and its description should be sufficient.
+SELECT SKU, SKU_Description
+FROM CATALOG_SKU_2014
+WHERE CatalogPage is NULL;
