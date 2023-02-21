@@ -1,0 +1,63 @@
+/*
+SQL Lab #5
+Lauren Louie
+*/
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+
+/*
+1.What is the total quantity ordered (according to the Quantity column in the 
+ORDER_ITEM table) of our 'Dive Mask, Small Clear'? Have the output labelled 
+'AmtItems'.
+This output is easily interpretable for managers to figure out how many of the 
+'Dive Mask, Small Clear' they have ordered in total to add to their inventory. 
+They might also be able to figure out if they want to purchase more or less based 
+on the customer demands. 
+From my understanding, the business might want to order more during the summer 
+months than the winter months since people might purchase more during the warm 
+weather season.
+*/
+SELECT SUM(Quantity) AS 'AmtItems'
+FROM ORDER_ITEM
+WHERE SKU IN (
+SELECT SKU
+FROM INVENTORY
+WHERE SKU_Description = 'Dive Mask, Small Clear');
+
+--2. What are the Warehouse IDs associated with items that are listed in between 
+catalog page 24 and 70 from 2014. Make sure there are no duplicates and label the 
+output as 'MidBookWarehouseIDs'. 
+SELECT DISTINCT WarehouseID AS 'MidBookWarehouseIDs'
+FROM INVENTORY
+WHERE SKU IN (
+SELECT SKU
+FROM CATALOG_SKU_2014
+WHERE CatalogPage BETWEEN 24 AND 70);
+
+/*
+3. We need to know the name of the manager and the city and state that the 
+warehouse is in for the Camping department items. Be sure your output is ordered by
+the manager, warehouse city and the state in that order.
+With this output information, customers are able to either contact or easily find 
+which the warehouse managers in the country with items from the camping department.
+Even though there is not a list of manager phone numbers, this is another step 
+closer to contacting the managers to inquire about the department items. 
+*/
+SELECT Manager, WarehouseCity, WarehouseState
+FROM WAREHOUSE
+WHERE WarehouseID IN (
+SELECT WarehouseID
+FROM INVENTORY
+WHERE SKU IN (
+SELECT SKU
+FROM SKU_DATA
+WHERE Department = 'Camping'))
+ORDER BY Manager, WarehouseCity, WarehouseState;
+
+--4. Return the Buyer name, SKU and the sum of the quantity on order for the 
+combination of the Buyer and that SKU. Order it by the buyer name.  
+SELECT Buyer, SKU,
+(SELECT COUNT (*)
+FROM INVENTORY
+WHERE SKU_DATA.SKU=INVENTORY.SKU) AS 'Sum of Quantity On Order'
+FROM SKU_DATA
+ORDER BY Buyer;
