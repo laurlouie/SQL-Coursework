@@ -1,0 +1,64 @@
+/*
+SQL Lab #1
+Lauren Louie
+*/
+USE [22WQ_BUAN4210_Lloyd_CapeCodd]
+
+-- (1) Return all data from the SKU_Data table.
+SELECT *
+FROM SKU_DATA;
+
+-- (2) Return the city and state  for each warehouse from our Warehouse table. 
+SELECT WarehouseCity, WarehouseState
+FROM WAREHOUSE;
+
+/* (3) Return the SKU, department and the buyer from the SKU_Datatable. This can 
+help a business as it can keep better track of a buyer's purchase history. 
+*/
+SELECT SKU, Department, Buyer
+FROM SKU_DATA;
+
+/* (4) Return the unique SKU descriptions from the Inventory table.Provides a list 
+of all items in the inventory - eliminating any duplications*/
+SELECT DISTINCT SKU_Description
+FROM INVENTORY;
+
+-- (5) Return the unique Departments and SKU descriptions from the 2013 catalog.
+SELECT DISTINCT Department, SKU_Description
+FROM CATALOG_SKU_2013;
+
+/* (6) Return the top 10 rows of Quantity on Hand and SKU from the Inventory table.
+This returns the top 10 rows in this table. From this table, we need to order more 
+of SKU #'s 101100, 201000, and 202000  becasue there is a quantity of less than 50 
+on hand.*/
+SELECT TOP 10 QuantityOnHand, SKU
+FROM INVENTORY;
+
+/* (7) Return all data from the Catalog SKU 2014 table and order it by the catalog 
+page.Having the data ordered by Catalog Page, it makes it more customer friendly as
+they can easy check the Department on SKU Description of the product they might be 
+looking for.*/
+SELECT *
+FROM CATALOG_SKU_2014
+ORDER BY CatalogPage;
+
+-- (8) Return the price and SKU from the Order Item table and order it by the Price
+in ascending order.
+SELECT Price, SKU
+FROM ORDER_ITEM
+ORDER BY Price ASC;
+ 
+-- (9) Return the Warehouse city, Manager and Square feet from the Warehouse table 
+and order it by the Square feet in descending order. 
+SELECT WarehouseCity, Manager, SquareFeet
+FROM WAREHOUSE
+ORDER BY SquareFeet DESC;
+
+/* (10) Return the Quantity on hand, the Quantity on order and the SKU from the 
+Inventory table and order it by the Quantity on hand in Ascending order and the 
+Quantity on Order in Descending order. We are able to make better business 
+decisions to effectively choose which products to purchase more/less of the two 
+quantities of on hand and on order.*/
+SELECT QuantityOnHand, QuantityOnOrder, SKU
+FROM INVENTORY
+ORDER BY QuantityOnHand ASC, QuantityOnOrder DESC;
